@@ -1,0 +1,63 @@
+data<-read.csv("p1_data/household_power_consumption.txt",header = TRUE, sep = ";")
+
+library(lubridate) 
+data$Date <- dmy(data$Date)
+dadosValidos <- data[ data$Date == ymd( "2007-02-01") | data$Date == ymd("2007-02-02") , ]
+
+
+f<- dadosValidos$Global_active_power;
+dadosValidos$Global_active_power <- as.numeric(levels(f))[f];
+
+
+f<- dadosValidos$Voltage;
+dadosValidos$Voltage <- as.numeric(levels(f))[f];
+
+
+s1<- dadosValidos$Sub_metering_1;
+s2<- dadosValidos$Sub_metering_2;
+s3<- dadosValidos$Sub_metering_3;
+
+dadosValidos$Sub_metering_1 <- as.numeric(levels(s1))[s1];
+dadosValidos$Sub_metering_2 <- as.numeric(levels(s2))[s2];
+dadosValidos$Sub_metering_3 <- as.numeric(levels(s3))[s3];
+
+
+
+
+f<- dadosValidos$Global_reactive_power;
+dadosValidos$Global_reactive_power <- as.numeric(levels(f))[f];
+
+
+
+png("plot4.png",width = 480,height = 480)
+
+
+par(mfrow=c(2,2))
+
+dm <- dadosValidos
+
+plot(dadosValidos$Global_active_power   , xaxt = "n", xlab = "" , ylab = "Global Active Power (kilowats)" ,  type = "l")
+axis(1, dm$Date, weekdays( (dm$Date),abbreviate=T), cex.axis = .7)
+
+
+plot(dadosValidos$Voltage , xaxt = "n", xlab = "datetime" , ylab = "Voltage" ,  type = "l")
+ 
+
+
+
+
+
+with(dadosValidos,{
+        plot(Sub_metering_1 , xaxt = "n", xlab = "" , ylab = "Energy sub metering" ,  type = "l")
+        points(Sub_metering_2 ,col="red",xaxt = "n", xlab = "" , ylab = "Energy sub metering" ,  type = "l")
+        points(Sub_metering_3 ,col="blue",xaxt = "n",  xlab = "" , ylab = "Energy sub metering" ,  type = "l")
+         
+        
+        legend("topright",  c("Sub_metering_1","Sub_metering_2","Sub_metering_3"), col=c("black","red","blue") ,pch="____" )
+})
+
+plot(dadosValidos$Global_reactive_power , xaxt = "n", xlab = "datetime" , ylab = "Global Reactive Power (kilowats)" ,  type = "l")
+
+
+
+dev.off()
