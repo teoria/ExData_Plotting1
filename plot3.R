@@ -4,6 +4,8 @@ library(lubridate)
 data$Date <- dmy(data$Date)
 dadosValidos <- data[ data$Date == ymd( "2007-02-01") | data$Date == ymd("2007-02-02") , ]
 
+dadosValidos$Date  <- as.Date(dadosValidos$Date) 
+dadosValidos$datetime <- ymd_hms(paste(dadosValidos$Date, dadosValidos$Time))
 
 
 png("plot3.png",width = 480,height = 480)
@@ -18,9 +20,9 @@ dadosValidos$Sub_metering_3 <- as.numeric(levels(s3))[s3];
 
 
 with(dadosValidos,{
-        plot(Sub_metering_1 , xaxt = "n", xlab = "" , ylab = "Energy sub metering" ,  type = "l")
-        points(Sub_metering_2 ,col="red",xaxt = "n", xlab = "" , ylab = "Energy sub metering" ,  type = "l")
-        points(Sub_metering_3 ,col="blue",xaxt = "n",  xlab = "" , ylab = "Energy sub metering" ,  type = "l")
+        plot(dadosValidos$datetime,Sub_metering_1 ,  xlab = "" , ylab = "Energy sub metering" ,  type = "l")
+        points(dadosValidos$datetime,Sub_metering_2 ,col="red",xaxt = "n", xlab = "" , ylab = "Energy sub metering" ,  type = "l")
+        points(dadosValidos$datetime,Sub_metering_3 ,col="blue",xaxt = "n",  xlab = "" , ylab = "Energy sub metering" ,  type = "l")
         
 })
 

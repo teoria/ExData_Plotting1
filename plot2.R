@@ -7,10 +7,12 @@ dadosValidos <- data[ data$Date == ymd( "2007-02-01") | data$Date == ymd("2007-0
 f<- dadosValidos$Global_active_power;
 dadosValidos$GAP <- as.numeric(levels(f))[f];
 
+dadosValidos$Date  <- as.Date(dadosValidos$Date) 
+dadosValidos$datetime <- ymd_hms(paste(dadosValidos$Date, dadosValidos$Time))
+
 png("plot2.png",width = 480,height = 480)
 
-plot(dadosValidos$GAP , xaxt = "n", xlab = "" , ylab = "Global Active Power (kilowats)" ,  type = "l")
+plot(  dadosValidos$datetime  ,dadosValidos$GAP ,  xlab = "" , ylab = "Global Active Power (kilowats)" ,  type = "l")
 
- 
 
 dev.off()
